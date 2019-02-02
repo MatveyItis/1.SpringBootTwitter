@@ -7,7 +7,7 @@
     <groupId>ru.itis.maletskov</groupId>
     <artifactId>SpringBootTwitter</artifactId>
     <version>0.1</version>
-    
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -24,7 +24,7 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-mustache</artifactId>
+            <artifactId>spring-boot-starter-freemarker</artifactId>
             <version>${spring-version}</version>
         </dependency>
 

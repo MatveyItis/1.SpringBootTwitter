@@ -99,8 +99,8 @@
     <schema id="22" parent="8" name="public">
       <ObjectId>2200</ObjectId>
       <Comment>standard public schema</Comment>
-      <IntrospectionTimestamp>2019-02-02.14:51:19.956</IntrospectionTimestamp>
-      <IntrospectionStateNumber>2527</IntrospectionStateNumber>
+      <IntrospectionTimestamp>2019-02-02.17:37:34.578</IntrospectionTimestamp>
+      <IntrospectionStateNumber>2537</IntrospectionStateNumber>
       <Current>1</Current>
       <Visible>1</Visible>
     </schema>
@@ -155,11 +155,11 @@
     </sequence>
     <table id="30" parent="22" name="client">
       <ObjectId>26150</ObjectId>
-      <StateNumber>2527</StateNumber>
+      <StateNumber>2537</StateNumber>
     </table>
     <table id="31" parent="22" name="message">
       <ObjectId>26142</ObjectId>
-      <StateNumber>2519</StateNumber>
+      <StateNumber>2537</StateNumber>
     </table>
     <table id="32" parent="22" name="user_role">
       <ObjectId>26158</ObjectId>
@@ -221,31 +221,52 @@
       <StateNumber>2519</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <index id="42" parent="31" name="message_pkey">
+    <column id="42" parent="31" name="author">
+      <Position>4</Position>
+      <DataType>bytea|0s</DataType>
+      <StateNumber>2533</StateNumber>
+      <TypeId>17</TypeId>
+    </column>
+    <column id="43" parent="31" name="user_id">
+      <Position>5</Position>
+      <DataType>bigint|0s</DataType>
+      <StateNumber>2536</StateNumber>
+      <TypeId>20</TypeId>
+    </column>
+    <index id="44" parent="31" name="message_pkey">
       <ObjectId>26148</ObjectId>
       <ColNames>id</ColNames>
       <Unique>1</Unique>
     </index>
-    <key id="43" parent="31" name="message_pkey">
+    <key id="45" parent="31" name="message_pkey">
       <ObjectId>26149</ObjectId>
       <ColNames>id</ColNames>
       <UnderlyingIndexName>message_pkey</UnderlyingIndexName>
       <Primary>1</Primary>
     </key>
-    <column id="44" parent="32" name="user_id">
+    <foreign-key id="46" parent="31" name="fkd7icyhb4ris5w8ajik1jo3x6w">
+      <ObjectId>26166</ObjectId>
+      <ColNames>user_id</ColNames>
+      <RefTableId>26150</RefTableId>
+      <RefColPositions>1</RefColPositions>
+      <RefTableName>client</RefTableName>
+      <RefKeyName>client_pkey</RefKeyName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="47" parent="32" name="user_id">
       <Position>1</Position>
       <DataType>bigint|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>2526</StateNumber>
       <TypeId>20</TypeId>
     </column>
-    <column id="45" parent="32" name="roles">
+    <column id="48" parent="32" name="roles">
       <Position>2</Position>
       <DataType>varchar(255)|0s</DataType>
       <StateNumber>2526</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <foreign-key id="46" parent="32" name="fkn9c0xpoqj8btnfgue4qu0nb06">
+    <foreign-key id="49" parent="32" name="fkn9c0xpoqj8btnfgue4qu0nb06">
       <ObjectId>26161</ObjectId>
       <ColNames>user_id</ColNames>
       <RefTableId>26150</RefTableId>

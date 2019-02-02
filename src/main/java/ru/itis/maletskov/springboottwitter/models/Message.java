@@ -3,10 +3,7 @@ package ru.itis.maletskov.springboottwitter.models;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -19,11 +16,18 @@ public class Message {
     private String text;
     private String tag;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User author;
 
-    public Message(String text, String tag) {
+    public Message(String text, String tag, User author) {
         this.text = text;
         this.tag = tag;
+        this.author = author;
+    }
+
+    public String getAuthorName() {
+        return author != null ? author.getUsername() : "<none>";
     }
 
 }
