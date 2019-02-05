@@ -55,6 +55,18 @@
         </div>
         </#if>
         <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+        <#if isRegisterForm>
+        <div class="dorm-group mb-2">
+            <div class="col-md-6">
+                <div class="g-recaptcha" data-sitekey="6LexQI8UAAAAAIB5qQQaF3jbLQA-UyMdh3R8vRPU"></div>
+            <#if captchaError??>
+                <div class="col-md-6 col-xl-4 alert alert-${messageType}" role="alert">
+                    ${captchaError}
+                </div>
+            </#if>
+            </div>
+        </div>
+        </#if>
         <div class="form-group">
             <div class="col-md-6 col-xl-4">
                 <button class="btn btn-primary" type="submit">
@@ -68,7 +80,6 @@
                     <a href="/registration">Registration</a>
                 </#if>
             </div>
-
         </div>
     </form>
 </#macro>
