@@ -18,14 +18,20 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
-    @Autowired
     private UserRepository userRepository;
 
-    @Autowired
     private MailSender mailSender;
 
-    @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public UserService(UserRepository userRepository,
+                       MailSender mailSender,
+                       PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.mailSender = mailSender;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username)
@@ -33,6 +39,9 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException("User not found");
+        }
+        if (user.getActivationCode() != null) {
+            throw new UsernameNotFoundException("User is not activated");
         }
         return user;
     }
@@ -118,7 +127,7 @@ public class UserService implements UserDetailsService {
     }
 
     public void unsubscribe(User currentUser, User user) {
-        user.getSubscribers().remove(user);
+        user.getSubscribers().remove(currentUser);
         userRepository.save(user);
     }
 }
