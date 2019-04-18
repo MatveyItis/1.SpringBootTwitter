@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.itis.maletskov.springboottwitter.models.Message;
 import ru.itis.maletskov.springboottwitter.models.User;
+import ru.itis.maletskov.springboottwitter.models.dto.MessageDto;
 import ru.itis.maletskov.springboottwitter.repositories.MessageRepository;
 
 import javax.persistence.EntityManager;
@@ -18,15 +19,15 @@ public class MessageService {
     @Autowired
     private EntityManager entityManager;
 
-    public Page<Message> messageList(String filter, Pageable pageable) {
+    public Page<MessageDto> messageList(String filter, Pageable pageable, User user) {
         if (filter != null && !filter.isEmpty()) {
-            return messageRepository.findByTag(filter, pageable);
+            return messageRepository.findByTag(filter, pageable, user);
         } else {
-            return messageRepository.findAll(pageable);
+            return messageRepository.findAll(pageable, user);
         }
     }
 
-    public Page<Message> messageListForUser(User author, Pageable pageable) {
-        return messageRepository.findByAuthor(author, pageable);
+    public Page<MessageDto> messageListForUser(Pageable pageable, User currentUser, User author) {
+        return messageRepository.findByUser(pageable, author, currentUser);
     }
 }

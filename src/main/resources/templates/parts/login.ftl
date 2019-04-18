@@ -62,7 +62,7 @@
                 <div class="col-md-6">
                     <div class="g-recaptcha" data-sitekey="6LexQI8UAAAAAIB5qQQaF3jbLQA-UyMdh3R8vRPU"></div>
                     <#if captchaError??>
-                        <div class="col-md-6 col-xl-4 alert alert-${messageType}" role="alert">
+                        <div class="col-md-6 col-xl-6 alert alert-${messageType}" role="alert">
                             ${captchaError}
                         </div>
                     </#if>

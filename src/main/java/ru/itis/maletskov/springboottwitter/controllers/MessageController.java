@@ -11,13 +11,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 import ru.itis.maletskov.springboottwitter.models.Message;
 import ru.itis.maletskov.springboottwitter.models.User;
+import ru.itis.maletskov.springboottwitter.models.dto.MessageDto;
 import ru.itis.maletskov.springboottwitter.repositories.MessageRepository;
 import ru.itis.maletskov.springboottwitter.services.MessageService;
 
@@ -29,7 +30,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Controller
-public class MainController {
+public class MessageController {
     @Autowired
     private MessageRepository messageRepository;
 
@@ -49,7 +50,7 @@ public class MainController {
                        Model model,
                        @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
                        @AuthenticationPrincipal User user) {
-        Page<Message> page = messageService.messageList(filter, pageable);
+        Page<MessageDto> page = messageService.messageList(filter, pageable, user);
         model.addAttribute("page", page);
         model.addAttribute("url", "/main");
         model.addAttribute("filter", filter);
@@ -90,7 +91,7 @@ public class MainController {
                                Model model,
                                @RequestParam(required = false) Message message,
                                @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<Message> page = messageService.messageListForUser(author, pageable);
+        Page<MessageDto> page = messageService.messageListForUser(pageable, currentUser, author);
         model.addAttribute("userChannel", author);
         model.addAttribute("subscriptionsCount", author.getSubscriptions().size());
         model.addAttribute("subscribersCount", author.getSubscribers().size());
@@ -102,7 +103,7 @@ public class MainController {
         return "userMessages";
     }
 
-    @PostMapping("/user-messages/{user}")
+    @PostMapping("/user-messages/{userId}")
     public String updateMessage(@AuthenticationPrincipal User currentUser,
                                 @PathVariable Long userId,
                                 @RequestParam("id") Message message,
@@ -122,6 +123,27 @@ public class MainController {
         }
         return "redirect:/user-messages/" + userId;
     }
+
+    @GetMapping("/messages/{message}/like")
+    public String like(@AuthenticationPrincipal User user,
+                       @PathVariable Message message,
+                       RedirectAttributes redirectAttributes,
+                       @RequestHeader(required = false) String referer) {
+        Set<User> likes = message.getLikes();
+
+        if (likes.contains(user)) {
+            likes.remove(user);
+        } else {
+            likes.add(user);
+        }
+        UriComponents components = UriComponentsBuilder.fromHttpUrl(referer).build();
+
+        components.getQueryParams()
+                .entrySet().forEach(pair -> redirectAttributes.addAttribute(pair.getKey(), pair.getValue()));
+
+        return "redirect:" + components.getPath();
+    }
+
 
     private void saveFile(Message message, MultipartFile file) throws IOException {
         if (file != null && !file.getOriginalFilename().isEmpty()) {
